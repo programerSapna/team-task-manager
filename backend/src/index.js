@@ -5,10 +5,15 @@ require('dotenv').config();
 
 const app = express();
 
+// CORS fix
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: [
+    'http://localhost:3000',
+    'https://team-task-manager-frontend-hpir.onrender.com'
+  ],
   credentials: true
 }));
+
 app.use(express.json());
 
 // Routes
