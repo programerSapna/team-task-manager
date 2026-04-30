@@ -1,7 +1,7 @@
 const Task = require('../models/Task');
 const Project = require('../models/Project');
 
-const getDashboard = async (req, res) => {
+exports.getDashboard = async (req, res) => {
   try {
     const userId = req.user.id;
 
@@ -11,7 +11,10 @@ const getDashboard = async (req, res) => {
     const projectIds = projects.map(p => p._id);
 
     const totalTasks = await Task.countDocuments({ project: { $in: projectIds } });
-    const myTasks = await Task.countDocuments({ assignedTo: userId });
+    const myTasks = await Task.countDocuments({ 
+      project: { $in: projectIds },
+      assignedTo: userId 
+    });
     const completedTasks = await Task.countDocuments({
       project: { $in: projectIds }, status: 'done'
     });
@@ -27,19 +30,14 @@ const getDashboard = async (req, res) => {
       status: { $ne: 'done' }
     });
 
-    // Tasks per user
-    const tasksPerUser = await Task.aggregate([
-      { $match: { project: { $in: projectIds }, assignedTo: { $exists: true } } },
-      { $group: { _id: '$assignedTo', count: { $sum: 1 } } },
-      { $lookup: { from: 'users', localField: '_id', foreignField: '_id', as: 'user' } },
-      { $unwind: '$user' },
-      { $project: { name: '$user.name', count: 1 } }
-    ]);
-
-    const recentTasks = await Task.find({ assignedTo: userId })
+    // Recent tasks — project ke saare tasks dikhao
+    const recentTasks = await Task.find({ 
+      project: { $in: projectIds } 
+    })
       .sort({ createdAt: -1 })
       .limit(5)
-      .populate('project', 'name');
+      .populate('project', 'name')
+      .populate('assignedTo', 'name');
 
     res.json({
       stats: {
@@ -47,13 +45,9 @@ const getDashboard = async (req, res) => {
         inProgressTasks, todoTasks,
         overdueTasks, totalProjects: projects.length
       },
-      tasksPerUser,
       recentTasks
     });
   } catch (err) {
-    console.error('DASHBOARD ERROR:', err.message);
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: 'Server error' });
   }
 };
-
-module.exports = { getDashboard };

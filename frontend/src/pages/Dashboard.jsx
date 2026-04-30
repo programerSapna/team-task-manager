@@ -38,15 +38,17 @@ const Dashboard = () => {
 
       {/* Recent Tasks */}
       <div style={{ background: 'white', borderRadius: '8px', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-        <h2 style={{ color: '#1f2937', marginBottom: '1rem' }}>My Recent Tasks</h2>
+        <h2 style={{ color: '#1f2937', marginBottom: '1rem' }}>Recent Tasks</h2>
         {data?.recentTasks?.length === 0 ? (
-          <p style={{ color: '#6b7280' }}>No tasks assigned yet</p>
+          <p style={{ color: '#6b7280' }}>Koi task nahi hai abhi</p>
         ) : (
           data?.recentTasks?.map(task => (
             <div key={task._id} style={{ padding: '0.75rem', borderBottom: '1px solid #f3f4f6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <p style={{ margin: 0, fontWeight: '500', color: '#1f2937' }}>{task.title}</p>
-                <p style={{ margin: 0, fontSize: '0.85rem', color: '#6b7280' }}>{task.project?.name}</p>
+                <p style={{ margin: 0, fontSize: '0.85rem', color: '#6b7280' }}>
+                  {task.project?.name} • Assigned: {task.assignedTo?.name || 'Unassigned'}
+                </p>
               </div>
               <span style={{
                 padding: '0.25rem 0.75rem',
