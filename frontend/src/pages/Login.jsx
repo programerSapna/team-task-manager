@@ -58,8 +58,8 @@ const Login = () => {
           </button>
         </form>
         <p style={{ textAlign: 'center', marginTop: '1rem', color: '#6b7280' }}>
-          Account nahi hai? <Link to="/register" style={{ color: '#3b82f6' }}>Register karo</Link>
-        </p>
+  Don't have an account? <Link to="/register" style={{ color: '#3b82f6' }}>Register here</Link>
+</p>
       </div>
     </div>
   );

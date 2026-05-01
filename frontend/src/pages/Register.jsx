@@ -69,8 +69,8 @@ const Register = () => {
           </button>
         </form>
         <p style={{ textAlign: 'center', marginTop: '1rem', color: '#6b7280' }}>
-          Already account hai? <Link to="/login" style={{ color: '#3b82f6' }}>Login karo</Link>
-        </p>
+  Already have an account? <Link to="/login" style={{ color: '#3b82f6' }}>Login here</Link>
+</p>
       </div>
     </div>
   );
